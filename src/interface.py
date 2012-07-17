@@ -30,19 +30,24 @@ class MainInterface (object):
 	
 	#Buttons
 	self.nes = ImageTk.PhotoImage(file="../includes/nes.png")
-	self.nesDispArea = canvas.create_image(w/2.65,h/2.8,image=self.nes,anchor=NW)
+	self.nesDispArea = canvas.create_image(w/2.85,h/3,image=self.nes,anchor=NW)
 	canvas.tag_bind(self.nesDispArea,"<Button-1>",lambda x: self.launchGEdit())
 
 	self.snes = ImageTk.PhotoImage(file="../includes/snes.png")
-	self.snesDispArea = canvas.create_image(((w/2.65)+150),h/2.8,image=self.snes,anchor=NW)
+	self.snesDispArea = canvas.create_image(((w/2.85)+225),h/3,image=self.snes,anchor=NW)
 	canvas.tag_bind(self.snesDispArea,"<Button-1>",lambda x: self.launchGEdit())
 
+	self.settings = ImageTk.PhotoImage(file="../includes/settings.png")
+	self.settingsDispArea = canvas.create_image(((w/2.85)+112),((h/3)+100),image=self.settings,anchor=NW)
+	canvas.tag_bind(self.settingsDispArea,"<Button-1>",lambda x: self.launchGEdit())
+
+
 	self.gb = ImageTk.PhotoImage(file="../includes/gb.png")
-	self.gbDispArea = canvas.create_image(w/2.65,((h/2.8)+150),image=self.gb,anchor=NW)
+	self.gbDispArea = canvas.create_image(w/2.85,((h/3)+200),image=self.gb,anchor=NW)
 	canvas.tag_bind(self.gbDispArea,"<Button-1>",lambda x: self.launchGEdit())
 
 	self.gba = ImageTk.PhotoImage(file="../includes/gba.png")
-	self.gbaDispArea = canvas.create_image(((w/2.65)+150),((h/2.8)+150),image=self.gba,anchor=NW)
+	self.gbaDispArea = canvas.create_image(((w/2.85)+225),((h/3)+200),image=self.gba,anchor=NW)
 	canvas.tag_bind(self.gbaDispArea,"<Button-1>",lambda x: self.launchGEdit())
 
     # Application launchers
