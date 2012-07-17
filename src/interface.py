@@ -21,7 +21,7 @@ class MainInterface (object):
 	canvas.pack(expand='yes',fill='both')
 
 	#Set wallpaper
-	self.wall = ImageTk.PhotoImage(file="../includes/wallpaper/wall1.jpg")
+	self.wall = ImageTk.PhotoImage(file="../includes/wallpaper/default.jpg")
 	self.background = canvas.create_image(0,0,image=self.wall,anchor=NW)
 	
 	#Display Raspberry Pi logo
