@@ -10,6 +10,8 @@ import getopt
 from os import system
 import subprocess as sub
 
+theme = 'b'
+
 class MainInterface (object):
 
     def __init__(self,master):
@@ -28,36 +30,48 @@ class MainInterface (object):
     #Draw interface
     def createInterface(self,canvas,w,h):
 	#Set wallpaper
-	self.wall = ImageTk.PhotoImage(file="../includes/wallpaper/default.jpg")
-	self.background = canvas.create_image(0,0,image=self.wall,anchor=NW)
+	self.wall= Image.open("../includes/wallpaper/default.png")
+	self.wall.thumbnail((w+(w-h),h),Image.ANTIALIAS)
+	self.wallResized = ImageTk.PhotoImage(self.wall)
+	self.background = canvas.create_image(w/2,h/2,image=self.wallResized,anchor=CENTER)
 	
 	#Display Raspberry Pi logo
-	self.logo = ImageTk.PhotoImage(file="../includes/rpilogo.png")
-	self.logoDispArea = canvas.create_image(w/2.5,0,image=self.logo,anchor=NW)
+	self.logo = ImageTk.PhotoImage(file="../includes/icons/rpilogo.png")
+	self.logoDispArea = canvas.create_image(w/2.45,h/7.5,image=self.logo,anchor=NW)
 	
 	#Buttons
-	self.nes = ImageTk.PhotoImage(file="../includes/nes.png")
-	self.nesDispArea = canvas.create_image(w/2.85,h/3,image=self.nes,anchor=NW)
+	global theme
+	if theme=='b':
+	    self.nes = ImageTk.PhotoImage(file="../includes/icons/nes_black.png")
+	    self.snes = ImageTk.PhotoImage(file="../includes/icons/snes_black.png")
+	    self.settings = ImageTk.PhotoImage(file="../includes/icons/settings_black.png")
+	    self.gb = ImageTk.PhotoImage(file="../includes/icons/gb_black.png")
+	    self.gba = ImageTk.PhotoImage(file="../includes/icons/gba_black.png")
+	    self.powerOff = ImageTk.PhotoImage(file="../includes/icons/power_black.png")
+	else:
+	    self.nes = ImageTk.PhotoImage(file="../includes/icons/nes_white.png")
+	    self.snes = ImageTk.PhotoImage(file="../includes/icons/snes_white.png")
+	    self.settings = ImageTk.PhotoImage(file="../includes/icons/settings_white.png")
+	    self.gb = ImageTk.PhotoImage(file="../includes/icons/gb_white.png")
+	    self.gba = ImageTk.PhotoImage(file="../includes/icons/gba_white.png")
+	    self.powerOff = ImageTk.PhotoImage(file="../includes/icons/power_white.png")
+
+	self.nesDispArea = canvas.create_image(w/2.95,h/3.5,image=self.nes,anchor=NW)
 	canvas.tag_bind(self.nesDispArea,"<Button-1>",lambda x: self.launchGEdit())
 
-	self.snes = ImageTk.PhotoImage(file="../includes/snes.png")
-	self.snesDispArea = canvas.create_image(((w/2.85)+225),h/3,image=self.snes,anchor=NW)
+	self.snesDispArea = canvas.create_image(((w/2.95)+225),h/3.5,image=self.snes,anchor=NW)
 	canvas.tag_bind(self.snesDispArea,"<Button-1>",lambda x: self.launchGEdit())
 
-	self.settings = ImageTk.PhotoImage(file="../includes/settings.png")
-	self.settingsDispArea = canvas.create_image(((w/2.85)+112),((h/3)+100),image=self.settings,anchor=NW)
+	self.settingsDispArea = canvas.create_image(((w/2.95)+112),((h/3.5)+100),image=self.settings,anchor=NW)
 	canvas.tag_bind(self.settingsDispArea,"<Button-1>",lambda x: self.settingsMenu(canvas,w,h))
 
-	self.gb = ImageTk.PhotoImage(file="../includes/gb.png")
-	self.gbDispArea = canvas.create_image(w/2.85,((h/3)+200),image=self.gb,anchor=NW)
+	self.gbDispArea = canvas.create_image(w/2.95,((h/3.5)+200),image=self.gb,anchor=NW)
 	canvas.tag_bind(self.gbDispArea,"<Button-1>",lambda x: self.launchGEdit())
 
-	self.gba = ImageTk.PhotoImage(file="../includes/gba.png")
-	self.gbaDispArea = canvas.create_image(((w/2.85)+225),((h/3)+200),image=self.gba,anchor=NW)
+	self.gbaDispArea = canvas.create_image(((w/2.95)+225),((h/3.5)+200),image=self.gba,anchor=NW)
 	canvas.tag_bind(self.gbaDispArea,"<Button-1>",lambda x: self.launchGEdit())
 
-	self.powerOff = ImageTk.PhotoImage(file="../includes/power.png")
-	self.powerDispArea = canvas.create_image(w-60,h-60,image=self.powerOff,anchor=NW)
+	self.powerDispArea = canvas.create_image(w-75,h-75,image=self.powerOff,anchor=NW)
 	canvas.tag_bind(self.powerDispArea,"<Button-1>",lambda x: self.shutdown())
 
     # Application launchers
@@ -79,7 +93,7 @@ class MainInterface (object):
 	self.objects.append(self.settingsBg)	
 
 	#back arrow
-	self.back = ImageTk.PhotoImage(file="../includes/back.png")
+	self.back = ImageTk.PhotoImage(file="../includes/icons/back_white.png")
 	self.objects.append(self.back)	
 	self.backArrow = canvas.create_image(x1-60,y1-60,image=self.back,anchor=NW)
 	self.objects.append(self.backArrow)	
@@ -88,7 +102,7 @@ class MainInterface (object):
 
 	#Copyright text and header
 	self.objects.append(canvas.create_text(x0+5,y0+5,anchor=NW,font=("helvetica",16,"bold"),text="Settings"))
-	self.objects.append(canvas.create_text(x0+5,y1-10,anchor=SW,font=("helvetica",8),text="PiBoy Version 0.1 (Pong)\nDesigned by Gregory Gay (greg@greggay.com)\nPlease do not use this software to play games that you don't own!"))
+	self.objects.append(canvas.create_text(x0+5,y1-10,anchor=SW,font=("helvetica",8),text="PiBoy Version 0.2 (Odyssey)\nDesigned by Gregory Gay (greg@greggay.com)\nPlease do not use this software to play games that you don't own!"))
 
 	#Options
 	self.chooseBrightness = canvas.create_text(w/2.4,y0+50,anchor=NW,font=("helvetica",14,"bold"),text="Brightness",activefill="red")	
@@ -125,7 +139,7 @@ class MainInterface (object):
 	self.objects.append(self.settingsBg)	
 
 	#back arrow
-	self.back = ImageTk.PhotoImage(file="../includes/back.png")
+	self.back = ImageTk.PhotoImage(file="../includes/icons/back_white.png")
 	self.objects.append(self.back)	
 	self.backArrow = canvas.create_image(x1-60,y1-60,image=self.back,anchor=NW)
 	self.objects.append(self.backArrow)	
@@ -159,7 +173,7 @@ class MainInterface (object):
 	self.objects.append(self.settingsBg)	
 
 	#back arrow
-	self.back = ImageTk.PhotoImage(file="../includes/back.png")
+	self.back = ImageTk.PhotoImage(file="../includes/icons/back_white.png")
 	self.objects.append(self.back)	
 	self.backArrow = canvas.create_image(x1-60,y1-60,image=self.back,anchor=NW)
 	self.objects.append(self.backArrow)	
@@ -168,7 +182,7 @@ class MainInterface (object):
 
 	#Current wallpaper
 	self.objects.append(canvas.create_text(x0+10,y0+60,anchor=NW,font=("helvetica",14,"bold"),text="Current:"))
-	self.currentWall= Image.open("../includes/wallpaper/default.jpg")
+	self.currentWall= Image.open("../includes/wallpaper/default.png")
 	self.objects.append(self.currentWall)
 	self.currentWall.thumbnail((150,150),Image.ANTIALIAS)
 	self.currentThumb = ImageTk.PhotoImage(self.currentWall)
@@ -193,7 +207,7 @@ class MainInterface (object):
 		else:
 			startX=startX+160
 
-		self.options.append(Image.open("../includes/wallpaper/wall"+str(i+1)+".jpg"))
+		self.options.append(Image.open("../includes/wallpaper/wall"+str(i+1)+".png"))
 		self.objects.append(self.options[i])
 		self.options[i].thumbnail((150,150),Image.ANTIALIAS)
 		self.optionThumbs.append(ImageTk.PhotoImage(self.options[i]))
@@ -205,9 +219,9 @@ class MainInterface (object):
 
 
     def changeWallpaper(self,canvas,w,h,choice):
-	system("mv ../includes/wallpaper/default.jpg temp")
-	system("mv ../includes/wallpaper/wall"+str(choice+1)+".jpg ../includes/wallpaper/default.jpg")
-	system("mv temp ../includes/wallpaper/wall"+str(choice+1)+".jpg")
+	system("mv ../includes/wallpaper/default.png temp")
+	system("mv ../includes/wallpaper/wall"+str(choice+1)+".png ../includes/wallpaper/default.png")
+	system("mv temp ../includes/wallpaper/wall"+str(choice+1)+".png")
 	canvas.delete(ALL)
 	self.createInterface(canvas,w,h)
 
